@@ -16,3 +16,5 @@ In my experience, the GMG mobile app is not terribly reliable for indicating whe
 
 
 
+### Acknowledgements
+Big thanks to [Aenima4six2](https://github.com/Aenima4six2) for all of the work in decoding the protocol of the GMG UDP interface, the [GMG Emulator](https://github.com/Aenima4six2/gmg/tree/master/src/gmg-emulator) and their [GMG Client](https://github.com/Aenima4six2/gmg/tree/master/src/gmg-client) library. Their prior work as a great starting point.

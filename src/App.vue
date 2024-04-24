@@ -4,7 +4,7 @@
   import MainControls from './MainControls.vue';
   import { store } from './store';
   import { ref, watch } from 'vue';
-  import { addData, readAllData } from './local_db';
+  import { addData, readAllData } from './localDb';
   import { useEventSource } from '@vueuse/core';
 
   const { status, data, close, open } = useEventSource('/grill/status', [], {

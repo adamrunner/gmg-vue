@@ -38,7 +38,7 @@ router.get('/status', (req, res) => {
       status.host      = gmgClient.host;
       status.grillId   = gmgClient.grillId;
       status.connected = true;
-      status.timestamp = new Date();
+      status.timestamp = new Date().toISOString();
       res.write(`data: ${JSON.stringify(status)}\n\n`)
     })
   },2000);

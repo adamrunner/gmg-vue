@@ -8,9 +8,9 @@ export const store = reactive({
   fanModeActive: false,
   isOn: false,
   lowPelletAlarmActive: false,
-  state: "off",
+  state: "disconnected",
   host: "",
   grillId: "",
   connected: false,
-  connectionStatus: ""
+  connectionStatus: "CLOSED"
 })

@@ -9,6 +9,7 @@
 
   const { status, data, close, open } = useEventSource('/grill/status', [], {
     autoReconnect: true,
+    immediate: false,
   });
 
   function connect() {
@@ -43,7 +44,7 @@
     store.isOn                 = parsedData.isOn;
     store.lowPelletAlarmActive = parsedData.lowPelletAlarmActive;
     store.state                = parsedData.state;
-    store.connected            = parsedData.connected;
+    store.connected            = status.value === 'OPEN';
     store.grillId              = parsedData.grillId;
     store.host                 = parsedData.host;
     store.timestamp            = parsedData.timestamp;
@@ -51,6 +52,7 @@
     console.log(parsedData)
     addData(parsedData)
   });
+  // connect();
 </script>
 
 <template>

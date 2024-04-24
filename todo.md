@@ -1,8 +1,8 @@
 - [x] Add IndexedDB for persisting historical data
 - [x] Add timestamp to /grill/status payload
-- [ ] Disconnect
-- [ ] Handle store/UI updates for when disconnecting
-- [ ] Reconnect button
+- [x] Disconnect
+- [x] Handle store/UI updates for when disconnecting
+- [x] Reconnect button
 - [ ] Charts to present the stored historical data, https://apexcharts.com/vue-chart-demos/ https://apexcharts.com/docs/vue-charts/
 - [ ] Alerts / Notifications
 - [ ]

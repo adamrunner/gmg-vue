@@ -11,5 +11,6 @@ export const store = reactive({
   state: "off",
   host: "",
   grillId: "",
-  connected: false
+  connected: false,
+  connectionStatus: ""
 })

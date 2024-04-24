@@ -1,9 +1,9 @@
 <script setup>
   import { PowerIcon } from '@heroicons/vue/24/solid';
-  import { WifiIcon } from '@heroicons/vue/24/solid';
+  // import { ArrowPathIcon } from '@heroicons/vue/24/solid';
   import { store } from './store';
 
-  defineProps(['closeConnection']);
+  defineProps(['closeConnection', 'openConnection']);
 
   function togglePower() {
     store.isOn = !store.isOn;
@@ -25,16 +25,23 @@
       </button>
       <p class="text-white">Status: {{store?.state || "Off" }}</p>
     </div>
-    <div class="flex-1">
-        <button @click="closeConnection" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-          Disconnect
-        </button>
-    </div>
+
     <div class="flex-1">
       <p class="text-white">Connected: {{store?.connected}}</p>
       <p class="text-white">Grill ID: {{store?.grillId}}</p>
       <p class="text-white">Host: {{store?.host}}</p>
       <p class="text-white">Last Update: {{store?.timestamp}}</p>
+    </div>
+    <div class="flex-1">
+        <button v-if="store?.connectionStatus == 'OPEN'" @click="closeConnection" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+          Disconnect
+        </button>
+        <button v-if="store?.connectionStatus == 'CONNECTING'" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+          Connecting...
+        </button>
+        <button v-if="store?.connectionStatus == 'CLOSED'" @click="openConnection" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+          Connect
+        </button>
     </div>
   </div>
 

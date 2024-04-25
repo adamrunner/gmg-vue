@@ -1,6 +1,5 @@
 import { reactive } from "vue";
-
-export const store = reactive({
+const fields = {
   currentFoodTemp: 0,
   currentGrillTemp: 0,
   desiredFoodTemp: 0,
@@ -13,4 +12,9 @@ export const store = reactive({
   grillId: "",
   connected: false,
   connectionStatus: "CLOSED"
+}
+export const store = reactive(fields)
+
+export const entriesStore = reactive({
+  entries: []
 })

@@ -2,7 +2,7 @@
   import GrillTempControl from './GrillTempControl.vue';
   import FoodTempControl from './FoodTempControl.vue';
   import MainControls from './MainControls.vue';
-  import { store } from './store';
+  import { store, entriesStore } from './store';
   import { ref, watch } from 'vue';
   import { addData, readAllData } from './localDb';
   import { useEventSource } from '@vueuse/core';
@@ -12,10 +12,19 @@
     immediate: false,
   });
 
+
   function connect() {
     open();
     store.connectionStatus = status.value;
   }
+
+  function loadAllData() {
+    readAllData().then((data) => {
+      entriesStore.entries.push(...data);
+    });
+
+  }
+
 
   const disconnect = () => {
     close();
@@ -51,14 +60,20 @@
     store.connectionStatus     = status.value;
     console.log(parsedData)
     addData(parsedData)
+    entriesStore.entries.push(parsedData);
   });
   // connect();
+  // loadAllData();
 </script>
 
 <template>
   <div class="grid md:grid-cols-4 gap-2 justify-center">
-    <MainControls :close-connection="disconnect" :open-connection="connect" />
+    <MainControls :close-connection="disconnect" :open-connection="connect" :load-all-data="loadAllData"/>
     <GrillTempControl />
     <FoodTempControl />
+    <div class="md:col-start-2 md:col-span-2 p-6  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <p class="text-white">Entries Store Count: {{ entriesStore.entries.length }}</p>
+    </div>
+
   </div>
 </template>

@@ -3,9 +3,15 @@
 - [x] Disconnect
 - [x] Handle store/UI updates for when disconnecting
 - [x] Reconnect button
+- [x] Refactor to use idb library, much better api: https://www.npmjs.com/package/idb
+- [x] Add incoming entries to the entriesStore
+- [x] Add incoming entries to the localDb
+- [x] Load historic data from IndexedDB into entries store
 - [ ] Charts to present the stored historical data, https://apexcharts.com/vue-chart-demos/ https://apexcharts.com/docs/vue-charts/
+- [ ] Control to clear database
 - [ ] Alerts / Notifications
 - [ ]
+- [ ] Convert to TypeScript
 
 Other helpful resources:
 

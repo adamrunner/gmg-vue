@@ -8,7 +8,7 @@
 - [x] Add incoming entries to the localDb
 - [x] Load historic data from IndexedDB into entries store
 - [ ] Charts to present the stored historical data, https://apexcharts.com/vue-chart-demos/ https://apexcharts.com/docs/vue-charts/
-- [ ] Control to clear database
+- [x] Control to clear database
 - [ ] Alerts / Notifications
 - [ ]
 - [ ] Convert to TypeScript

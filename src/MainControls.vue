@@ -3,7 +3,7 @@
   // import { ArrowPathIcon } from '@heroicons/vue/24/solid';
   import { store } from './store';
 
-  defineProps(['closeConnection', 'openConnection', 'loadAllData']);
+  defineProps(['closeConnection', 'openConnection', 'loadAllData', 'deleteAllData']);
 
   function togglePower() {
     store.isOn = !store.isOn;
@@ -46,6 +46,9 @@
         <br>
         <button @click="loadAllData" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg mt-2.5 text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Load All Data
+        </button>
+        <button @click="deleteAllData" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg mt-2.5 text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+          Delete All Data
         </button>
     </div>
   </div>

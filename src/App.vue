@@ -4,7 +4,7 @@
   import MainControls from './MainControls.vue';
   import { store, entriesStore } from './store';
   import { ref, watch } from 'vue';
-  import { addData, readAllData } from './localDb';
+  import { addData, readAllData, clearAllData } from './localDb';
   import { useEventSource } from '@vueuse/core';
 
   const { status, data, close, open } = useEventSource('/grill/status', [], {
@@ -25,6 +25,12 @@
 
   }
 
+  function deleteAllData() {
+    clearAllData().then(() => {
+      entriesStore.entries = [];
+      console.log("Data Cleared");
+    })
+  }
 
   const disconnect = () => {
     close();
@@ -68,7 +74,7 @@
 
 <template>
   <div class="grid md:grid-cols-4 gap-2 justify-center">
-    <MainControls :close-connection="disconnect" :open-connection="connect" :load-all-data="loadAllData"/>
+    <MainControls :close-connection="disconnect" :open-connection="connect" :load-all-data="loadAllData" :delete-all-data="deleteAllData"/>
     <GrillTempControl />
     <FoodTempControl />
     <div class="md:col-start-2 md:col-span-2 p-6  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

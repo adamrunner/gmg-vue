@@ -1,31 +1,31 @@
 import { openDB } from 'idb';
 
-const db = await openDB('gmg-vue', 1, {
+const dbName    = 'gmg-vue';
+const storeName = 'temperatures';
+
+const db = await openDB(dbName, 1, {
   upgrade(db, oldVersion, newVersion, transaction, event) {
-    // Create an object store named "temperatures"
-    if (!db.objectStoreNames.contains('temperatures')) {
-      db.createObjectStore('temperatures', { autoIncrement: true });
+    if (!db.objectStoreNames.contains(storeName)) {
+      db.createObjectStore(storeName, { autoIncrement: true });
     }
-  },
-  blocked(currentVersion, blockedVersion, event) {
-    // …
-  },
-  blocking(currentVersion, blockedVersion, event) {
-    // …
-  },
-  terminated() {
-    // …
-  },
+  }
 });
 
 
 
 async function addData(data) {
-  return await db.add('temperatures', data);
+  return await db.add(storeName, data);
 }
 
-async function readAllData(success, error) {
-  return await db.getAll('temperatures')
+async function readAllData() {
+  return await db.getAll(storeName)
 }
 
-export { addData, readAllData };
+async function clearAllData() {
+  const tx    = db.transaction(storeName, 'readwrite');
+  const store = tx.objectStore(storeName);
+  await store.clear();
+  return await tx.done;
+}
+
+export { addData, readAllData, clearAllData};

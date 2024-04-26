@@ -1,12 +1,12 @@
 <script setup>
   import { PowerIcon } from '@heroicons/vue/24/solid';
   // import { ArrowPathIcon } from '@heroicons/vue/24/solid';
-  import { store } from './store';
+  import { state } from './store';
 
   defineProps(['closeConnection', 'openConnection', 'loadAllData', 'deleteAllData']);
 
   function togglePower() {
-    store.isOn = !store.isOn;
+    state.isOn = !state.isOn;
     fetch('/grill/powerToggle', {
       method: 'POST',
       headers: {
@@ -23,24 +23,24 @@
         <PowerIcon class="h-6 w-6 inline-block" />
         Power
       </button>
-      <p class="text-white">Status: {{store?.state || "Off" }}</p>
+      <p class="text-white">Status: {{state?.state || "Off" }}</p>
     </div>
 
     <div class="flex-1 justify-items-center">
-      <p class="text-white">Connected: {{store?.connected}}</p>
-      <p class="text-white">Grill ID: {{store?.grillId}}</p>
-      <p class="text-white">Host: {{store?.host}}</p>
-      <p class="text-white">Last Update: {{store?.timestamp}}</p>
+      <p class="text-white">Connected: {{state?.connected}}</p>
+      <p class="text-white">Grill ID: {{state?.grillId}}</p>
+      <p class="text-white">Host: {{state?.host}}</p>
+      <p class="text-white">Last Update: {{state?.timestamp}}</p>
     </div>
 
     <div class="flex-1 text-right">
-        <button v-if="store?.connectionStatus == 'OPEN'" @click="closeConnection" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+        <button v-if="state?.connectionStatus == 'OPEN'" @click="closeConnection" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
           Disconnect
         </button>
-        <button v-if="store?.connectionStatus == 'CONNECTING'" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+        <button v-if="state?.connectionStatus == 'CONNECTING'" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
           Connecting...
         </button>
-        <button v-if="store?.connectionStatus == 'CLOSED'" @click="openConnection" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+        <button v-if="state?.connectionStatus == 'CLOSED'" @click="openConnection" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
           Connect
         </button>
         <br>

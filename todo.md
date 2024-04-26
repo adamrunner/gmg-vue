@@ -7,10 +7,15 @@
 - [x] Add incoming entries to the entriesStore
 - [x] Add incoming entries to the localDb
 - [x] Load historic data from IndexedDB into entries store
-- [ ] Charts to present the stored historical data, https://apexcharts.com/vue-chart-demos/ https://apexcharts.com/docs/vue-charts/
 - [x] Control to clear database
-- [ ] Alerts / Notifications
-- [ ]
+- [ ] Charts to present the stored historical data
+- [ ] Series data store
+- [ ] Update watch function to push new series data into the store
+- [ ] abstract handling of updating of state attributes
+- [x] rename store object to state as it represents the current state
+- [ ] Alerts / Notifications / Timers
+- [ ] Prettier - wtf is it
+- [ ] Multi-Grill Support
 - [ ] Convert to TypeScript
 
 Other helpful resources:
@@ -20,3 +25,5 @@ https://web.dev/articles/indexeddb#create-object-stores
 https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
 https://masteringjs.io/tutorials/express/server-sent-events
 https://flowbite.com/docs/components/buttons/
+https://apexcharts.com/vue-chart-demos/
+https://apexcharts.com/docs/vue-charts/

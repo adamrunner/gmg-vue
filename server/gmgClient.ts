@@ -1,5 +1,19 @@
-import { createSocket } from 'node:dgram';
+import { type RemoteInfo, createSocket } from 'node:dgram';
 import { GmgStatus } from './gmgStatus.js';
+
+interface GmgClientOptions {
+  port: number;
+  host: string;
+  tries: number;
+  retryMs: number;
+  timeout?: number;
+  grillId?: string;
+}
+
+interface Command {
+  cmd: string | ((arg: number) => string);
+}
+
 
 const commands = Object.freeze({
   powerOn: 'UK001!',
@@ -10,7 +24,7 @@ const commands = Object.freeze({
   setFoodTempF: (temp) => `UF${temp}!`
 });
 
-const defaults = Object.freeze({
+const defaults: GmgClientOptions = Object.freeze({
   port: 8080,
   host: '255.255.255.255',
   tries: 3,
@@ -19,14 +33,20 @@ const defaults = Object.freeze({
   grillId: ''
 });
 
-const getCommandData = (command) => {
-  const fullCommand = `${command}!\n`
-  const data = Buffer.from(fullCommand, 'ascii')
-  return data
-}
+const getCommandData = (command: Command): Buffer => {
+  const fullCommand = `${command.cmd}!\n`;
+  return Buffer.from(fullCommand, 'ascii');
+};
+
 
 class GmgClient {
-  constructor(options) {
+  options: GmgClientOptions
+  port: number;
+  host: string;
+  tries: number;
+  retryMs: number;
+  grillId: string;
+  constructor(options: GmgClientOptions) {
     this.options = { ...defaults, ...options };
     this.port = this.options.port;
     this.host = this.options.host;
@@ -34,51 +54,57 @@ class GmgClient {
     this.retryMs = this.options.retryMs;
   }
 
-  async getGrillStatus() {
-    const result = await this.sendCommand(commands.getGrillStatus);
+  async getGrillStatus(command: Command = {cmd: commands.getGrillStatus}): Promise<GmgStatus> {
+    const result = await this.sendCommand(command);
+
     return new GmgStatus(result.msg);
   }
 
-  async getGrillId() {
-    const result = await this.sendCommand(commands.getGrillId);
+  async getGrillId(command: Command = {cmd: commands.getGrillId}) {
+    const result = await this.sendCommand(command);
     return result.msg.toString();
   }
 
-  async powerOff() {
+  async powerOff(command: Command = {cmd: commands.powerOff}) {
     const status = await this.getGrillStatus();
     if (status.isOn) {
-      await this.sendCommand(commands.powerOff);
+      await this.sendCommand(command);
     }
   }
 
-  async powerOn() {
+  async powerOn(command: Command = {cmd: commands.powerOn}) {
     const status = await this.getGrillStatus();
     if (!status.isOn) {
-      await this.sendCommand(commands.powerOn);
+      await this.sendCommand(command);
     }
   }
 
   async powerToggle() {
     const status = await this.getGrillStatus();
     if (status.isOn) {
-      await this.sendCommand(commands.powerOff);
+      const command: Command = {cmd: commands.powerOff};
+      await this.sendCommand(command);
     } else {
-      await this.sendCommand(commands.powerOn);
+      const command: Command = {cmd: commands.powerOn};
+      await this.sendCommand(command);
     }
+
   }
 
-  async setGrillTempF(temp) {
+  async setGrillTempF(temp: number) {
     const status = await this.getGrillStatus();
     if (status.isOn) {
-      await this.sendCommand(commands.setGrillTempF(temp));
+      const command: Command = {cmd: commands.setGrillTempF(temp)};
+      await this.sendCommand(command);
     }
     // TODO: throw error if grill is off
   }
 
-  async setFoodTempF(temp) {
+  async setFoodTempF(temp: number) {
     const status = await this.getGrillStatus();
     if (status.isOn) {
-      await this.sendCommand(commands.setFoodTempF(temp));
+      const command: Command = {cmd: commands.setFoodTempF(temp)};
+      await this.sendCommand(command);
     }
     // TODO: throw error if grill is off
   }
@@ -86,10 +112,10 @@ class GmgClient {
   async discoverGrill({ tries = this.tries } = {}) {
     return new Promise((res, rej) => {
       let attempts = 0
-      let schedule
+      let schedule: string | number | NodeJS.Timeout | undefined
       const socket = createSocket('udp4')
-      const data = getCommandData(commands.getGrillId)
-      const finish = (result) => {
+      const data = getCommandData({cmd: commands.getGrillId})
+      const finish = (result: Error | GmgClient) => {
         if (schedule) clearInterval(schedule)
         socket.removeAllListeners('message')
         socket.close()
@@ -132,7 +158,7 @@ class GmgClient {
     })
   }
 
-  async sendCommand(command, { tries = this.tries } = {}) {
+  private async sendCommand(command: Command): Promise<{ msg: Buffer; info: RemoteInfo }> {
     if (this.host === defaults.host) {
       console.log('Grill host is broadcast address!')
       await this.discoverGrill()
@@ -140,12 +166,12 @@ class GmgClient {
 
     return await new Promise((res, rej) => {
       let attempts = 0
-      let schedule
+
       const socket = createSocket('udp4')
       const data = getCommandData(command)
       const offset = data.byteLength
 
-      const finish = (result) => {
+      const finish = (result: Error | { msg: Buffer; info: RemoteInfo }) => {
         if (schedule) clearInterval(schedule)
         socket.removeAllListeners('message')
         socket.close()
@@ -163,8 +189,8 @@ class GmgClient {
       })
 
       // Send Commands
-      schedule = setInterval(() => {
-        if (attempts > tries) {
+      const schedule = setInterval(() => {
+        if (attempts > this.tries) {
           const error = new Error(`No response from Grill after [${attempts}] command sent attempts!`)
           finish(error)
           console.log(error)
@@ -183,4 +209,4 @@ class GmgClient {
   }
 }
 
-export default GmgClient;
+export { GmgClient, defaults as GmgDefaults };

@@ -15,5 +15,5 @@ app.use('/grill', grillRouter);
 app.use(homepageRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`GMG-Vue  app listening on port ${port}`)
 })

@@ -1,6 +1,6 @@
 import express from 'express'
-import GmgClient from './gmgClient.js'
-const gmgClient = new GmgClient()
+import {GmgClient, GmgDefaults} from './gmgClient.js'
+const gmgClient = new GmgClient(GmgDefaults)
 const router = express.Router()
 
 router.post('/powerOn', (req, res) => {
@@ -10,6 +10,7 @@ router.post('/powerOn', (req, res) => {
     res.send("OK")
   })
 })
+
 router.post('/powerOff', (req, res) => {
   gmgClient.powerOff().then((result) => {
     console.log("Result:", result)
@@ -17,6 +18,7 @@ router.post('/powerOff', (req, res) => {
     res.send("OK")
   })
 })
+
 router.post('/powerToggle', (req, res) => {
   gmgClient.powerToggle().then((result) => {
     console.log("Result:", result)
@@ -24,6 +26,23 @@ router.post('/powerToggle', (req, res) => {
     res.send("OK")
   })
 })
+
+router.post('/setTempF', (req, res) => {
+  console.log("Request:", req.body);
+  gmgClient.setGrillTempF(req.body.grill_temp).then(() => {
+    res.statusCode = 204
+    res.send("OK")
+  })
+})
+
+router.post('/setFoodTempF', (req, res) => {
+  console.log("Request:", req.body);
+  gmgClient.setFoodTempF(req.body.food_temp).then(() => {
+    res.statusCode = 204
+    res.send("OK")
+  })
+})
+
 // Server Sent Events for watching the grill status
 
 router.get('/status', (req, res) => {
@@ -46,32 +65,6 @@ router.get('/status', (req, res) => {
     clearInterval(interval);
     res.end();
   });
-})
-// This route is unused currently, remove later
-router.post('/discover', (req, res) => {
-  gmgClient.discoverGrill().then((grill) => {
-    console.log(grill)
-    res.json({grill: grill})
-  })
-
-})
-router.post('/setTempF', (req, res) => {
-  console.log("Request:", req.body);
-  gmgClient.setGrillTempF(req.body.grill_temp).then((result) => {
-
-    // console.log("Result:", result);
-    res.statusCode = 204
-    res.send("OK")
-  })
-})
-router.post('/setFoodTempF', (req, res) => {
-  console.log("Request:", req.body);
-  gmgClient.setFoodTempF(req.body.food_temp).then((result) => {
-
-    // console.log("Result:", result);
-    res.statusCode = 204
-    res.send("OK")
-  })
 })
 
 export default router;

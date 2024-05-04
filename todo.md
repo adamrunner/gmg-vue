@@ -8,14 +8,15 @@
 - [x] Add incoming entries to the localDb
 - [x] Load historic data from IndexedDB into entries store
 - [x] Control to clear database
-- [ ] Charts to present the stored historical data
-- [ ] Series data store
-- [ ] Update watch function to push new series data into the store
-- [ ] abstract handling of updating of state attributes
+- [x] Charts to present the stored historical data
+- [x] Series data store
+- [x] Update watch function to push new series data into the store
+- [x] abstract handling of updating of state attributes
 - [x] rename store object to state as it represents the current state
 - [ ] Alerts / Notifications / Timers
-- [ ] Prettier - wtf is it
+- [x] Prettier - wtf is it
 - [ ] Multi-Grill Support
+- [ ] Add JS Doc Type Hinting
 - [ ] Convert to TypeScript
 
 Other helpful resources:
